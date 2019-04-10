@@ -53,8 +53,8 @@ export default {
       this.map.add(polyline)
 
       this.mousetool = new AMap.MouseTool(this.map)
-      AMap.event.addListener( this.mouseTool,'draw',function(e){ //添加事件
-      console.log('绘制完成');
+      this.mousetool.on('draw',function(e){ //添加事件
+        console.log('绘制完成');
         console.log(e.obj.getPath());//获取路径/范围
       });
     },
@@ -68,16 +68,6 @@ export default {
         outlineColor: '#ffffff',
         
       }); //使用鼠标工具，在地图上画线
-      
-      // if (this.mouseTool !== {}) {
-        // this.mouseTool.on('draw', (e) => {
-        //   console.log('绘制结束');
-        //   console.log('e:', e.obj);
-        //   var path = this.polyline.getPath();
-        //   console.log(path);
-        //   // overlays.push(e.obj);
-        // })
-      // }
     }
   }
 }
