@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/tygc': {
+        target: 'http://localhost:10226/tygc',
+        // target: 'http://192.168.150.131:10227/tygc', // 真实请求的地址
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          '^/tygc': '' //后面可以使重写的新路径，一般不做更改
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

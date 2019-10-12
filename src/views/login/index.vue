@@ -21,15 +21,28 @@
           <swiper-slide v-for="(slide, index) in swiperSlides" :key="index">I'm Slide {{ slide }}</swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
+        
+        <div class="block">
+            <span class="demonstration">默认</span>
+            <el-date-picker
+            v-model="value1"
+            type="datetime"
+            placeholder="选择日期时间">
+            </el-date-picker>
+        </div>
+        <div class="refreshcode">{{code}}</div>
     </div>
 </template>
 <script>
+import axios from 'axios'
 import Utils from '@/utils/utils.js'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
     data(){
         return{
+            value1: '',
+            code:'',
             formLogin:{
                 pwd: '',
                 encypt_pwd:'',
@@ -62,14 +75,31 @@ export default {
         // console.log('this is current swiper instance object', this.swiper)
         // this.swiper.slideTo(3, 1000, false)
 
-        setInterval(() => {
-            console.log('simulate async data')
-            if (this.swiperSlides.length < 10) {
-            this.swiperSlides.push(this.swiperSlides.length + 1)
-            }
-        }, 3000)
+        // setInterval(() => {
+        //     console.log('simulate async data')
+        //     if (this.swiperSlides.length < 10) {
+        //     this.swiperSlides.push(this.swiperSlides.length + 1)
+        //     }
+        // }, 3000)
+        this.getcode()
+
+    },
+    beforeDestroy() {
+        
+    },
+    destroyed() {
+        this.formLogin = null
+        this.swiperOption = null
+        this.swiperOption1 = null
+        this.swiperSlides = null
     },
     methods: {
+        getcode () {
+            axios.get('/refreshcode').then(res=>{
+                console.log(res);
+                this.code = `${res.data.data.authcode} ->>>${res.data.data.date}`
+            })
+        },
         encyInfo(){
             const asePwd = Utils.encrypt(this.formLogin.pwd)
             console.log(`加密后pwd:${asePwd}`);
