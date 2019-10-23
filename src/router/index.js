@@ -7,35 +7,19 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'BaiduMap',
+    //   component: resolve => require(['@/views/pages/index1'], resolve)
+    // }, 
     {
       path: '/',
-      name: 'BaiduMap',
-      component: resolve => require(['@/views/pages/index1'], resolve)
-    },{
-      path: '/prop',
-      name: 'Prop',
-      component: resolve => require(['@/components/props/parent'], resolve)
-    }, {
-      path: '/logins',
-      name: 'login',
-      component: resolve => require(['@/views/logins/index'], resolve)
-    }, {
-      path: '/login',
-      name: 'logins',
-      component: resolve => require(['@/views/form/complexform'], resolve)
+      name: 'Login',
+      component: resolve => require(['@/views/login/uploadFile'], resolve)
     }, {
       path: '/a',
       name: 'dispatch',
       component: resolve => require(['@/views/dispatch/A'], resolve)
-    },{
-      path: '/menu',
-      name: 'Menu',
-      component: resolve => require(['@/views/menu/index'], resolve),
-
-      children:[{
-        path: 'test',
-        component: resolve => require(['@/views/login/index'], resolve)
-      }]
     },{
       path: '/form',
       name: '4Form',

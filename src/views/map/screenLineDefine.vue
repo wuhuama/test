@@ -7,13 +7,6 @@
       </div>
     </div>
     <div class="map-box">
-      <div class="border_line">
-        <span class="tr"></span>
-        <span class="tb"></span>
-        <span class="rt"></span>
-        <span class="rb"></span>
-      </div>
-
       <div id="map_container" class="map_container" ref="map_container"></div>
     </div>
   </div>
@@ -24,13 +17,17 @@ require("echarts-extension-amap") //引入高德地图扩展
 export default {
   data() {
     return {
-      map:{},//高德地图
+      map: null,//高德地图
       mouseTool: {}
     }
   },
   mounted() {
     // this.initMap();
     this.initChart()
+  },
+  destroyed() {
+    this.map.destroyed()
+    this.map = null
   },
   methods: {
     initMap () {
@@ -89,7 +86,7 @@ export default {
       var echartmap = this.$echarts.init(this.$refs.map_container);
       const series_ = [
         //闪动的线
-        /*{
+        {
           name: "上海 Top10",
           coordinateSystem: "amap",
           type: "lines",
@@ -121,7 +118,7 @@ export default {
               value: 95
             }
           ]
-        },*/
+        },
         //轨迹
         {
           name: "交通量",
@@ -239,6 +236,10 @@ export default {
         series: series_
       }
       echartmap.setOption(option)
+      this.$once('hook:beforeDestroy', () => {
+        echartmap.dispose()
+        echartmap = null                                
+      })
       this.map = echartmap.getModel().getComponent("amap").getAMap();
       let polyline = new AMap.Polyline({
         path: [new AMap.LngLat(120.3521309141421, 30.56954960904261), new AMap.LngLat(120.4480204540896, 30.624303172444428)],

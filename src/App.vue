@@ -1,14 +1,19 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import  "babel-polyfill"
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    console.log('更新');
+  },
 }
 </script>
 

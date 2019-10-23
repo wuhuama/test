@@ -11,7 +11,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const env = require('../config/prod.env')
+console.log(process.env.env_config)
+const env = require('../config/' + process.env.env_config + '.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -113,6 +114,11 @@ const webpackConfig = merge(baseWebpackConfig, {
       {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
+        ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../url_config'),
+        to: config.build.assetsRoot,
         ignore: ['.*']
       }
     ])

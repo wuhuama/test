@@ -9,6 +9,7 @@
 <script>
 export default {
     name: 'iFormItem',
+    inheritAttrs: false,
     props: {
         label: {
             type: String,
