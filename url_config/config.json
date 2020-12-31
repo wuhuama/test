@@ -1,4 +1,4 @@
 {
-  "prod": "http://192.168.114.12:8090/dxs",
+  "prod": "http://localhost:8081/dxs",
   "test": "http://192.168.114.12:8091/dxs"
 }

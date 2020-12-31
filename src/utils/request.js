@@ -2,22 +2,22 @@ import axios from 'axios'
 import router from '../router'
 import { Message } from 'element-ui'
 
-// 获取当前环境的BASE_URL
-function getUrl () {
-  let _tempURL = require('../../url_config/config.json')
-  // let _tempURL = await axios.get('/url_config/config.json')
-  console.log(_tempURL)
-}
-
-
-const base_url = process.env.NODE_ENV == 'development' ? process.env.BASE_API : getUrl()[process.env.ENV_CONFIG]
-console.log(base_url);
 // 创建axios实例
 const $http = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
   timeout: 50000
 })
-
+console.log(`当前环境:${process.env.NODE_ENV}`);
+if (process.env.NODE_ENV == 'development') {
+  $http.defaults.baseURL = process.env.BASE_API
+} else {
+  axios.get('./config.json').then(res => {
+    $http.defaults.baseURL = res.data[process.env.ENV_CONFIG]
+  })
+}
+// const $http = axios.create({
+//   baseURL: process.env.BASE_API, // api的base_url
+//   timeout: 50000
+// })
 // request 请求拦截器
 $http.interceptors.request.use(config => {
   return config

@@ -19,11 +19,15 @@
     "echarts-extension-amap": "^1.0.0-rc.3",
     "element-ui": "^2.12.0",
     "mockjs": "^1.0.1-beta3",
+    "ol": "^6.3.1",
+    "shapefile": "^0.6.6",
+    "shpjs": "^3.5.0",
     "vue": "^2.5.2",
     "vue-amap": "^0.5.9",
     "vue-awesome-swiper": "^3.1.3",
     "vue-baidu-map": "^0.21.22",
     "vue-router": "^3.0.1",
+    "vue-slider-component": "^3.2.11",
     "vuex": "^3.1.1"
   },
   "devDependencies": {

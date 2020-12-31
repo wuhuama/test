@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     getKey () {
-      this.$http.get('/api/getkey').then(res => {
+      this.$http.get('/getkey').then(res => {
         console.log(res);
       }).catch(error=>{
         // console.log(`error ${error}`);

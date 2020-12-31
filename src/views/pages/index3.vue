@@ -7,11 +7,13 @@
     <input type="text" v-model.lazy="value1">
     <el-tree-select v-model="value1" :name="valueTitle" :options="menus" @getValue="getValue($event)" @getName="getName($event)"></el-tree-select>
     <el-tree-select2 v-model="value1" :data="menus"></el-tree-select2>
+    <el-tree-select3 v-model="value1" :data="menus" node-key="id"></el-tree-select3>
   </div>
 </template>
 <script>
 import ElTreeSelect from '@/components/TreeSelect/index'
 import ElTreeSelect2 from '@/components/TreeSelect/index2'
+import ElTreeSelect3 from '@/components/TreeSelect/ElTreeSelect'
 export default {
   data () {
     return {
@@ -63,7 +65,9 @@ export default {
   },
   components: {
     ElTreeSelect,
-    ElTreeSelect2
+    ElTreeSelect2,
+    ElTreeSelect3
+    
   },
   mounted() {
     // setTimeout(() => {

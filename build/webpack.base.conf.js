@@ -89,6 +89,8 @@ module.exports = {
     child_process: 'empty'
   },
   externals: {
-    AMap: "AMap"
+    AMap: "AMap",
+    BaiduMap: 'BMap',
+    shp: 'shp'
   },
 }

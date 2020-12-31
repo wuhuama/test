@@ -7,13 +7,13 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'BaiduMap',
-    //   component: resolve => require(['@/views/pages/index1'], resolve)
-    // }, 
     {
       path: '/',
+      name: 'BaiduMap',
+      component: resolve => require(['@/views/pages/index3'], resolve)
+    }, 
+    {
+      path: '/login',
       name: 'Login',
       component: resolve => require(['@/views/login/uploadFile'], resolve)
     }, {
@@ -29,13 +29,18 @@ export default new Router({
       name: 'test',
       component: resolve => require(['@/views/test/index'], resolve)
     }, {
-      path: '/line',
+      path: '/map2',
       name: 'screenline',
-      component: resolve => require(['@/views/map/screenLineDefine'], resolve)
+      component: resolve => require(['@/views/map/openlayersMap'], resolve)
     }, {
       path: '/map',
       name: 'map',
       component: resolve => require(['@/views/map/index'], resolve)
+    },
+    {
+      path: '/baidu1',
+      name: 'SPFile',
+      component: resolve => require(['@/views/baidumap/index'], resolve)
     },
     {
       path: '/dmf',
@@ -51,6 +56,20 @@ export default new Router({
       path: '/table',
       name: Table,
       component: resolve => require(['@/views/tabledata/list'], resolve)
+    }, {
+      path: '/swiper',
+      name: 'ssssspp',
+      component: resolve => require(['@/views/swiper/autoplay'], resolve)
+    },
+    {
+      path: '/hebing',
+      name: 'HBing',
+      component: resolve => require(['@/views/table/hebing'], resolve)
+    },
+    {
+      path: '/demo',
+      name: 'TimeLine',
+      component: resolve => require(['@/views/demo/index'], resolve)
     }
   ]
 })
