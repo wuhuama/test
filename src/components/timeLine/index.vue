@@ -43,7 +43,7 @@
           :key="index"
           :style="getMarkStyle(item)"
         >
-          <div class="slider-mark-tick" :style="tickStyle" v-show="showTick"></div>
+          <div :class="['slider-mark-tick', {'lastValmore100': item.position >= 100}]" :style="tickStyle" v-show="showTick"></div>
           <div class="slider-mark-label" :style="labelStyle">
             <span>{{item.mark}}</span>
           </div>
@@ -110,7 +110,7 @@ export default {
     marks: {
       type: [Boolean, Array]
     },
-    /* 是否显示 刻度点标记 */
+    /* 是否显示间断点标记 */
     showTick: {
       type: Boolean,
       default: false
@@ -130,6 +130,7 @@ export default {
       currentY: 0,
       startPosition: 0,
       newPosition: 0,
+      transDuration0: false
     };
   },
   computed: {
@@ -137,7 +138,17 @@ export default {
       return typeof this.formatterTooltip === 'function' && this.formatterTooltip(this.value) || this.value
     },
     barSize() {
-      return `${(100 * (this.value - this.min)) / (this.max - this.min)}%`;
+      let barSize = `${(100 * (this.value - this.min)) / (this.max - this.min)}`
+      if (barSize < 0) {
+        barSize = 0
+      }else if (barSize > 100) {
+        barSize = 100
+      }
+      return barSize;
+    },
+    maxValue() {
+      const int = parseInt((this.max - this.min) / this.step) * this.step + this.min
+      return int
     },
     currentPosition() {
       return `${((this.value - this.min) / (this.max - this.min)) * 100}%`;
@@ -162,12 +173,14 @@ export default {
         ? {
             height: this.barSize,
             bottom: this.barStart,
-            'border-radius': `0 0 ${this.width/2}px ${this.width/2}px`
+            'border-radius': `0 0 ${this.width/2}px ${this.width/2}px`,
+            'transition-duration': this.dragging ? '0s' : '0.3s'
           }
         : {
-            width: this.barSize,
+            width: `${this.newPosition}%`,
             left: this.barStart,
-            'border-radius': `${this.height/2}px 0 0 ${this.height/2}px`
+            'border-radius': `${this.height/2}px 0 0 ${this.height/2}px`,
+            'transition-duration': this.dragging ? '0s' : '0.3s'
           };
     },
     wrapperStyle() {
@@ -176,13 +189,15 @@ export default {
           height: `${this.dotSize + 10}px`,
           width: `${this.dotSize + 10}px`,
           left: `-${(this.dotSize + 10 - this.width)/2}px`,
-          bottom: this.currentPosition
+          bottom: this.currentPosition,
+          'transition-duration': this.dragging ? '0s' : '0.3s'
         }
         : {
           height: `${this.dotSize + 10}px`,
           width: `${this.dotSize + 10}px`,
           top: `-${(this.dotSize + 10 - this.height)/2}px`,
-          left: this.currentPosition
+          left: `${this.newPosition}%`,
+          'transition-duration': this.dragging ? '0s' : '0.3s'
         };
     },
     buttonStyle() {
@@ -194,10 +209,12 @@ export default {
     tooltipStyle() {
       return this.vertical
         ? {
-          bottom: this.currentPosition
+          bottom: this.currentPosition,
+          'transition-duration': this.dragging ? '0s' : '0.3s'
         }
         : {
-          left: this.currentPosition
+          left: `${this.newPosition}%`,
+          'transition-duration': this.dragging ? '0s' : '0.3s'
         };
     },
     markList() {
@@ -285,6 +302,7 @@ export default {
       this.newValue = Math.min(this.max, Math.max(this.min, this.value));
     }
     this.oldValue = this.newValue;
+    this.newPosition = ((this.value - this.min) / (this.max - this.min)) * 100;
     window.addEventListener("resize", this.resetSize);
   },
   methods: {
@@ -306,6 +324,7 @@ export default {
         this.$emit("input", this.max);
       } else {
         this.newValue = val;
+        this.newPosition = parseFloat(this.barSize)
         if (this.valueChange()) {
           this.oldValue = val;
         }
@@ -322,7 +341,6 @@ export default {
     // 点击slider的进度条
     clickSlider(event) {
       if (this.sliderDisabled || this.dragging) return;
-      console.log(event);
       this.resetSize();
       // 相对于视口的top,left
       if (this.vertical) {
@@ -341,8 +359,9 @@ export default {
     },
     // 设置滑块按钮的位置
     setPosition(percent) {
-      console.log(`点击百分比：${percent}`);
-      // const targetValue = this.min + percent * (this.max - this.min) / 100
+      setTimeout(() => {
+        this.newPosition = parseFloat(this.barSize)
+      }, 0);
       this.setButtonPosition(percent);
     },
     setButtonPosition(newPosition, flag, diff) {
@@ -350,8 +369,8 @@ export default {
 
       if (newPosition < 0) {
         newPosition = 0;
-      } else if (newPosition > 100) {
-        newPosition = 100;
+      } else if (newPosition > this.maxValue) {
+        newPosition = this.maxValue;
       }
       /**
        * newPosition: 新值的百分比
@@ -380,6 +399,7 @@ export default {
       let value = steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min;
       value = parseFloat(value.toFixed(this.precision()));
       this.$emit("input", value);
+
       if (!this.dragging && this.value !== this.oldValue) {
         this.oldValue = this.value;
       }
@@ -446,7 +466,11 @@ export default {
           diff = ((this.currentX - this.startX) / this.sliderSize) * 100;
         }
         this.newPosition = this.startPosition + diff;
-        console.log(this.newPosition);
+        if (this.newPosition < 0) {
+          this.newPosition = 0
+        }else if (this.newPosition > this.maxValue) {
+          this.newPosition = this.maxValue
+        }
         this.setButtonPosition(this.newPosition, "mousemove", diff);
       }
     },
@@ -455,6 +479,7 @@ export default {
         setTimeout(() => {
           this.dragging = false;
           if (!this.isClick) {
+            this.newPosition = parseFloat(this.barSize)
             this.setButtonPosition(this.newPosition, "drag");
             this.emitChange();
           }
@@ -514,7 +539,8 @@ export default {
   position: absolute;
   height: 100%;
   background-color: #409eff;
-  transform: all 0.5s;
+  // transition-property: all;
+  transition: all 0.3s ease 0s;
   z-index: 1;
 }
 
@@ -534,13 +560,14 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    transition: all 0.5s ease 0s;
+    transition: all 0.3s ease 0s;
     user-select: none;
   }
 }
 
 .tooltip {
   position: absolute;
+  transition: all 0.3s ease 0s;
   &.top-tooltip {
     top: -10px;
     left: 50%;
@@ -600,8 +627,14 @@ export default {
     position: absolute;
     z-index: 4;
 
-    &:first-child, &:last-child {
+    &:first-child {
       .slider-mark-tick {
+        display: none;
+      }
+    }
+
+    &:last-child {
+      .slider-mark-tick.lastValmore100 {
         display: none;
       }
     }
