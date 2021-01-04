@@ -8,7 +8,6 @@
         :step="20"
         ref="timeline"
         class="timeline"
-        :vertical="false"
         :showTooltip="true"
         :formatter-tooltip="formatVal"
         :marks="true"

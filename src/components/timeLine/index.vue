@@ -171,7 +171,7 @@ export default {
     barStyle() {
       return this.vertical
         ? {
-          height: this.barSize,
+          height: `${this.newPosition}%`,
           bottom: this.barStart,
           'border-radius': `0 0 ${this.width / 2}px ${this.width / 2}px`,
           'transition-duration': this.dragging ? '0s' : '0.3s'
@@ -189,7 +189,7 @@ export default {
           height: `${this.dotSize + 10}px`,
           width: `${this.dotSize + 10}px`,
           left: `-${(this.dotSize + 10 - this.width) / 2}px`,
-          bottom: this.currentPosition,
+          bottom: `${this.newPosition}%`,
           'transition-duration': this.dragging ? '0s' : '0.3s'
         }
         : {
@@ -209,7 +209,7 @@ export default {
     tooltipStyle() {
       return this.vertical
         ? {
-          bottom: this.currentPosition,
+          bottom: `${this.newPosition}%`,
           'transition-duration': this.dragging ? '0s' : '0.3s'
         }
         : {
@@ -504,10 +504,12 @@ export default {
         ? {
           bottom: `${item.position}%`,
           height: `${this.width}px`,
+          transform: 'translateY(50%)'
         }
         : {
           left: `${item.position}%`,
-          width: `${this.height}px`
+          width: `${this.height}px`,
+          transform: 'translateX(-50%)'
         }
     }
   },
