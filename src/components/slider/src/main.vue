@@ -46,13 +46,15 @@
         ref="button2"
         v-if="range">
       </slider-button>
-      <div
-        class="el-slider__stop"
-        v-for="(item, key) in stops"
-        :key="key"
-        :style="getStopStyle(item)"
-        v-if="showStops">
-      </div>
+      <template v-if="showStops">
+        <div
+          class="el-slider__stop"
+          v-for="(item, key) in stops"
+          :key="key"
+          :style="getStopStyle(item)"
+        >
+        </div>
+      </template>
       <template v-if="markList.length > 0">
         <div>
           <div
@@ -75,6 +77,7 @@
 </template>
 
 <script type="text/babel">
+/* eslint-disable */
   import ElInputNumber from 'element-ui/packages/input-number';
   import SliderButton from './button.vue';
   import SliderMarker from './marker';

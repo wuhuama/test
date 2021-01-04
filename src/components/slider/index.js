@@ -1,7 +1,7 @@
+/* eslint-disable */
 import Slider from './src/main';
 
-/* istanbul ignore next */
-Slider.install = function(Vue) {
+Slider.install = function (Vue) {
   Vue.component(Slider.name, Slider);
 };
 

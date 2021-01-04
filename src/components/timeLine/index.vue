@@ -1,6 +1,6 @@
 <template>
   <div :class="['slider', {'is-vertial': vertical}]">
-    <input v-model="value" class="slider-input"></input>
+    <input v-model="value" class="slider-input" />
     <div
       ref="slider"
       class="slider-runway"
@@ -24,7 +24,7 @@
         <div class="slider-button" :style="buttonStyle"></div>
       </div>
       <!-- tooltip  -->
-      <div 
+      <div
         :class="['tooltip', vertical ? 'left-tooltip' : 'top-tooltip']"
         :style="tooltipStyle"
         v-show="showTooltip"
@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  name: "Cslider",
+  name: 'Cslider',
   props: {
     min: {
       type: Number,
@@ -135,67 +135,67 @@ export default {
   },
   computed: {
     tooltipText() {
-      return typeof this.formatterTooltip === 'function' && this.formatterTooltip(this.value) || this.value
+      return (typeof this.formatterTooltip === 'function' && this.formatterTooltip(this.value)) || this.value
     },
     barSize() {
       let barSize = `${(100 * (this.value - this.min)) / (this.max - this.min)}`
       if (barSize < 0) {
         barSize = 0
-      }else if (barSize > 100) {
+      } else if (barSize > 100) {
         barSize = 100
       }
       return barSize;
     },
     maxValue() {
-      const int = parseInt((this.max - this.min) / this.step) * this.step + this.min
+      const int = parseInt((this.max - this.min) / this.step, 10) * this.step + this.min
       return int
     },
     currentPosition() {
       return `${((this.value - this.min) / (this.max - this.min)) * 100}%`;
     },
     barStart() {
-      return "0%";
+      return '0%';
     },
     runwayStyle() {
-      return this.vertical 
+      return this.vertical
         ? {
-            height: `${this.height}px`,
-            width: `${this.width}px`,
-            'border-radius': `${this.width/2}px`
-          }
+          height: `${this.height}px`,
+          width: `${this.width}px`,
+          'border-radius': `${this.width / 2}px`
+        }
         : {
-            height: `${this.height}px`,
-            'border-radius': `${this.height/2}px`
-          };
+          height: `${this.height}px`,
+          'border-radius': `${this.height / 2}px`
+        };
     },
     barStyle() {
       return this.vertical
         ? {
-            height: this.barSize,
-            bottom: this.barStart,
-            'border-radius': `0 0 ${this.width/2}px ${this.width/2}px`,
-            'transition-duration': this.dragging ? '0s' : '0.3s'
-          }
+          height: this.barSize,
+          bottom: this.barStart,
+          'border-radius': `0 0 ${this.width / 2}px ${this.width / 2}px`,
+          'transition-duration': this.dragging ? '0s' : '0.3s'
+        }
         : {
-            width: `${this.newPosition}%`,
-            left: this.barStart,
-            'border-radius': `${this.height/2}px 0 0 ${this.height/2}px`,
-            'transition-duration': this.dragging ? '0s' : '0.3s'
-          };
+          width: `${this.newPosition}%`,
+          left: this.barStart,
+          'border-radius': `${this.height / 2}px 0 0 ${this.height / 2}px`,
+          'transition-duration': this.dragging ? '0s' : '0.3s'
+        };
     },
     wrapperStyle() {
       return this.vertical
         ? {
           height: `${this.dotSize + 10}px`,
           width: `${this.dotSize + 10}px`,
-          left: `-${(this.dotSize + 10 - this.width)/2}px`,
+          left: `-${(this.dotSize + 10 - this.width) / 2}px`,
           bottom: this.currentPosition,
           'transition-duration': this.dragging ? '0s' : '0.3s'
         }
         : {
           height: `${this.dotSize + 10}px`,
           width: `${this.dotSize + 10}px`,
-          top: `-${(this.dotSize + 10 - this.height)/2}px`,
+          top: `-${(this.dotSize + 10 - this.height) / 2}px`,
           left: `${this.newPosition}%`,
           'transition-duration': this.dragging ? '0s' : '0.3s'
         };
@@ -221,27 +221,33 @@ export default {
       if (!this.marks) {
         return [];
       }
+      const arr = []
       if (typeof this.marks === 'boolean') {
         // 均分
-        let arr = []
+        const result = []
         for (let i = this.min; i <= this.max; i += this.step) {
-          arr.push(i)
+          result.push(i)
         }
-
-        return arr.map((mark, index) => ({
-          index,
-          position: index * 100 / (this.max - this.min) * this.step,
-          mark
-        }))
+        result.map((mark, index) => {
+          arr.push({
+            index,
+            position: ((index * 100) / (this.max - this.min)) * this.step,
+            mark
+          })
+          return mark
+        })
       }
-      else if (this.marks instanceof Array) {
-         
-        return this.marks.map((mark, index) => ({
-          index,
-          position: index * 100 / (this.marks.length-1), // (this.max - this.min) * this.step,
-          mark
-        }))
+      if (this.marks instanceof Array) {
+        this.marks.map((mark, index) => {
+          arr.push({
+            index,
+            position: (index * 100) / (this.marks.length - 1), // (this.max - this.min) * this.step,
+            mark
+          })
+          return mark
+        })
       }
+      return arr
     },
     tickStyle() {
       return this.vertical
@@ -258,19 +264,20 @@ export default {
       return this.vertical
         ? {
           'margin-left': `${this.width + 5}px`,
-          'left': '0',
-          'top': '50%',
-          'transform': 'translateY(-50%)'
+          left: '0',
+          top: '50%',
+          transform: 'translateY(-50%)'
         }
         : {
           'margin-top': `${this.height + 5}px`,
-          'left': '50%',
-          'top': '0',
-          'transform': 'translateX(-50%)'
+          left: '50%',
+          top: '0',
+          transform: 'translateX(-50%)'
         };
     }
   },
   watch: {
+    // eslint-disable-next-line no-unused-vars
     value(val, oldVal) {
       if (this.dragging) {
         return;
@@ -283,7 +290,7 @@ export default {
       }
     },
     newValue(val) {
-      this.$emit("input", val);
+      this.$emit('input', val);
     },
     min() {
       this.setValue();
@@ -293,17 +300,17 @@ export default {
     },
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.resetSize);
+    window.removeEventListener('resize', this.resetSize);
   },
   mounted() {
-    if (typeof this.value !== "number" || isNaN(this.value)) {
+    if (typeof this.value !== 'number' || Number.isNaN(this.value)) {
       this.newValue = this.min;
     } else {
       this.newValue = Math.min(this.max, Math.max(this.min, this.value));
     }
     this.oldValue = this.newValue;
     this.newPosition = ((this.value - this.min) / (this.max - this.min)) * 100;
-    window.addEventListener("resize", this.resetSize);
+    window.addEventListener('resize', this.resetSize);
   },
   methods: {
     // 检测slider的值是否发生改变
@@ -313,15 +320,15 @@ export default {
     // 设置slider的value
     setValue() {
       if (this.min > this.max) {
-        console.error("min 不能比 max 大");
+        console.error('min 不能比 max 大');
         return;
       }
       const val = this.value;
-      if (typeof val !== "number" || isNaN(val)) return;
+      if (typeof val !== 'number' || Number.isNaN(val)) return;
       if (val < this.min) {
-        this.$emit("input", this.min);
+        this.$emit('input', this.min);
       } else if (val > this.max) {
-        this.$emit("input", this.max);
+        this.$emit('input', this.max);
       } else {
         this.newValue = val;
         this.newPosition = parseFloat(this.barSize)
@@ -334,7 +341,7 @@ export default {
     resetSize() {
       if (this.$refs.slider) {
         this.sliderSize = this.$refs.slider[
-          `client${this.vertical ? "Height" : "Width"}`
+          `client${this.vertical ? 'Height' : 'Width'}`
         ];
       }
     },
@@ -365,7 +372,7 @@ export default {
       this.setButtonPosition(percent);
     },
     setButtonPosition(newPosition, flag, diff) {
-      if (newPosition === null || isNaN(newPosition)) return;
+      if (newPosition === null || Number.isNaN(newPosition)) return;
 
       if (newPosition < 0) {
         newPosition = 0;
@@ -378,14 +385,14 @@ export default {
        */
       const lengthPerStep = 100 / ((this.max - this.min) / this.step);
       let steps = 0;
-      if (flag === "mousemove") {
+      if (flag === 'mousemove') {
         if (diff < 0) {
           steps = Math.floor(newPosition / lengthPerStep);
         } else {
           steps = Math.ceil(newPosition / lengthPerStep);
         }
       }
-      if (flag === "drag") {
+      if (flag === 'drag') {
         steps = Math.ceil(newPosition / lengthPerStep);
       } else {
         const spanStep = newPosition / lengthPerStep;
@@ -398,7 +405,7 @@ export default {
       }
       let value = steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min;
       value = parseFloat(value.toFixed(this.precision()));
-      this.$emit("input", value);
+      this.$emit('input', value);
 
       if (!this.dragging && this.value !== this.oldValue) {
         this.oldValue = this.value;
@@ -406,8 +413,8 @@ export default {
     },
     // 根绝min, max, step 获取精度
     precision() {
-      let precisions = [this.min, this.max, this.step].map((item) => {
-        let decimal = ("" + item).split(".")[1];
+      const precisions = [this.min, this.max, this.step].map((item) => {
+        const decimal = (`${item}`).split('.')[1];
         return decimal ? decimal.length : 0;
       });
       return Math.max.apply(null, precisions);
@@ -415,7 +422,7 @@ export default {
     //
     emitChange() {
       this.$nextTick(() => {
-        this.$emit("change", this.value);
+        this.$emit('change', this.value);
       });
     },
     handleMouseEnter() {
@@ -427,16 +434,16 @@ export default {
     onButtonDown(event) {
       if (this.sliderDisabled) return;
       this.onDragStart(event);
-      window.addEventListener("mousemove", this.onDragging);
-      window.addEventListener("touchmove", this.onDragging);
-      window.addEventListener("mouseup", this.onDragEnd);
-      window.addEventListener("touchend", this.onDragEnd);
-      window.addEventListener("contextmenu", this.onDragEnd);
+      window.addEventListener('mousemove', this.onDragging);
+      window.addEventListener('touchmove', this.onDragging);
+      window.addEventListener('mouseup', this.onDragEnd);
+      window.addEventListener('touchend', this.onDragEnd);
+      window.addEventListener('contextmenu', this.onDragEnd);
     },
     onDragStart(event) {
       this.dragging = true;
       this.isClick = true;
-      if (event.type === "touchstart") {
+      if (event.type === 'touchstart') {
         event.clientY = event.touches[0].clientY;
         event.clientX = event.touches[0].clientX;
       }
@@ -452,7 +459,7 @@ export default {
       if (this.dragging) {
         this.isClick = false; // 滑块拖动过程中可判定不是点击事件
         this.resetSize();
-        if (event.type === "touchmove") {
+        if (event.type === 'touchmove') {
           event.clientY = event.touches[0].clientY;
           event.clientX = event.touches[0].clientX;
         }
@@ -468,39 +475,40 @@ export default {
         this.newPosition = this.startPosition + diff;
         if (this.newPosition < 0) {
           this.newPosition = 0
-        }else if (this.newPosition > this.maxValue) {
+        } else if (this.newPosition > this.maxValue) {
           this.newPosition = this.maxValue
         }
-        this.setButtonPosition(this.newPosition, "mousemove", diff);
+        this.setButtonPosition(this.newPosition, 'mousemove', diff);
       }
     },
+    // eslint-disable-next-line no-unused-vars
     onDragEnd(event) {
       if (this.dragging) {
         setTimeout(() => {
           this.dragging = false;
           if (!this.isClick) {
             this.newPosition = parseFloat(this.barSize)
-            this.setButtonPosition(this.newPosition, "drag");
+            this.setButtonPosition(this.newPosition, 'drag');
             this.emitChange();
           }
         }, 0);
-        window.addEventListener("mousemove", this.onDragging);
-        window.addEventListener("touchmove", this.onDragging);
-        window.addEventListener("mouseup", this.onDragEnd);
-        window.addEventListener("touchend", this.onDragEnd);
-        window.addEventListener("contextmenu", this.onDragEnd);
+        window.addEventListener('mousemove', this.onDragging);
+        window.addEventListener('touchmove', this.onDragging);
+        window.addEventListener('mouseup', this.onDragEnd);
+        window.addEventListener('touchend', this.onDragEnd);
+        window.addEventListener('contextmenu', this.onDragEnd);
       }
     },
     getMarkStyle(item) {
-      return this.vertical 
+      return this.vertical
         ? {
-          'bottom': `${item.position}%`,
-          'height': `${this.width}px`,
-          }
+          bottom: `${item.position}%`,
+          height: `${this.width}px`,
+        }
         : {
-          'left': `${item.position}%`,
-          'width': `${this.height}px`
-          }
+          left: `${item.position}%`,
+          width: `${this.height}px`
+        }
     }
   },
 };
