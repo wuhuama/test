@@ -1,6 +1,6 @@
 <template>
   <div :class="['slider', {'is-vertial': vertical}]">
-    <input v-model="value" class="slider-input" />
+    <input v-model="value" class="slider-input" v-if="0"/>
     <div
       ref="slider"
       class="slider-runway"
@@ -43,7 +43,7 @@
           :key="index"
           :style="getMarkStyle(item)"
         >
-          <div :class="['slider-mark-tick', {'lastValmore100': item.position >= 100}]" :style="tickStyle" v-show="showTick"></div>
+          <div :class="['slider-mark-tick', {'lastValmore100': item.position >= 100}, {'hide-tick': item.position < newPosition}]" :style="tickStyle" v-show="showTick"></div>
           <div class="slider-mark-label" :style="labelStyle">
             <span>{{item.mark}}</span>
           </div>
@@ -114,7 +114,7 @@ export default {
     showTick: {
       type: Boolean,
       default: false
-    }
+    }                                                                                                         
   },
   data() {
     return {
@@ -147,7 +147,7 @@ export default {
       return barSize;
     },
     maxValue() {
-      const int = parseInt((this.max - this.min) / this.step, 10) * this.step + this.min
+      const int = 100 * (parseInt((this.max - this.min) / this.step, 10) * this.step + this.min) / (this.max - this.min)
       return int
     },
     currentPosition() {
@@ -297,7 +297,7 @@ export default {
     },
     max() {
       this.setValue();
-    },
+    }
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.resetSize);
@@ -636,7 +636,7 @@ export default {
     height: 100%;
     position: absolute;
     z-index: 4;
-
+    
     &:first-child {
       .slider-mark-tick {
         display: none;
@@ -653,7 +653,14 @@ export default {
       left: 0;
       top: 0;
       border-radius: 50%;
-      background-color: rgba(0,0,0,.16)
+      background-color: rgba(0,0,0,.16);
+      visibility: 1;
+      opacity: 1;
+      &.hide-tick {
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.3s ease 0s;
+      }
     }
     .slider-mark-label {
       font-size: 14px;
