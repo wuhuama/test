@@ -13,7 +13,7 @@
   "dependencies": {
     "@riophae/vue-treeselect": "^0.3.0",
     "async-validator": "^1.10.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.23.0",
     "bcryptjs": "^2.4.3",
     "echarts-extension-amap": "^1.0.0-rc.3",
