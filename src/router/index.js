@@ -11,7 +11,7 @@ export default new Router({
       path: '/',
       name: 'BaiduMap',
       component: resolve => require(['@/views/pages/index3'], resolve)
-    }, 
+    },
     {
       path: '/login',
       name: 'Login',
@@ -70,6 +70,17 @@ export default new Router({
       path: '/demo',
       name: 'TimeLine',
       component: resolve => require(['@/views/demo/index'], resolve)
+    },
+    {
+      path: '/amrTest',
+      name: 'AmrTest',
+      component: resolve => require(['@/views/demo/amrTest'], resolve)
+    },
+    {
+      path: '/testdd',
+      component: () => import('@/views/test/demo'),
+      hidden: true,
+      name: 'Test'
     }
   ]
 })
